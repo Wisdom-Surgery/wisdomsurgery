@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wisdom Surgery Clinic — Dr Anna Raymond</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -852,9 +853,11 @@
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // ── Formspree endpoints ──
-    const ENDPOINT_HELLO    = 'https://formspree.io/f/mjglvwdg'; // hello@wisdomsurgery.clinic
-    const ENDPOINT_REFERRAL = 'https://formspree.io/f/mjglvwdg'; // swap for referral@ endpoint when upgrading to paid plan
+    // ── Supabase client ──
+    const _supa = supabase.createClient(
+      'https://mhgdzxftvqpqwpxryurm.supabase.co',
+      'sb_publishable_BtGpwhScIGtGO_Yx_LLKow_7HBigtxk'
+    );
 
     // ── File upload ──
     let selectedFiles = [];
@@ -906,44 +909,47 @@
         e.preventDefault();
         const btn = document.getElementById('submit-btn');
         const status = document.getElementById('form-status');
-        const endpoint = selectedFiles.length > 0 ? ENDPOINT_REFERRAL : ENDPOINT_HELLO;
 
         btn.disabled = true;
         btn.textContent = 'Sending…';
         status.textContent = '';
 
-        let fetchOptions;
-        if (selectedFiles.length > 0) {
-          const data = new FormData(contactForm);
-          selectedFiles.forEach(f => data.append('file', f));
-          fetchOptions = { method: 'POST', body: data, headers: { 'Accept': 'application/json' } };
-        } else {
-          const formData = new FormData(contactForm);
-          const json = {};
-          formData.forEach((v, k) => { json[k] = v; });
-          fetchOptions = { method: 'POST', body: JSON.stringify(json), headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } };
-        }
-
         try {
-          const res = await fetch(endpoint, fetchOptions);
-
-          if (res.ok) {
-            contactForm.innerHTML = `
-              <div class="md:col-span-2 text-center py-10">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(42,180,180,0.1)">
-                  <svg class="w-7 h-7 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                </div>
-                <p class="font-display text-xl text-navy-800 font-medium mb-2">Message received</p>
-                <p class="text-navy-500 text-sm">Thank you — we'll be in touch shortly.</p>
-              </div>`;
-          } else {
-            status.textContent = 'Something went wrong. Please try again or call us on 1300 111 324.';
-            status.style.color = '#c0392b';
-            btn.disabled = false;
-            updateSubmitButton();
+          // Upload files to Supabase Storage first
+          const filePaths = [];
+          for (const file of selectedFiles) {
+            const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+            const { error: uploadError } = await _supa.storage
+              .from('contact-attachments')
+              .upload(path, file);
+            if (uploadError) throw uploadError;
+            filePaths.push(path);
           }
+
+          // Save submission to Supabase
+          const fd = new FormData(contactForm);
+          const { error } = await _supa.from('contact_submissions').insert({
+            first_name:   fd.get('first_name'),
+            last_name:    fd.get('last_name'),
+            email:        fd.get('email'),
+            phone:        fd.get('phone'),
+            enquiry_type: fd.get('enquiry_type'),
+            message:      fd.get('message'),
+            file_paths:   filePaths
+          });
+          if (error) throw error;
+
+          contactForm.innerHTML = `
+            <div class="md:col-span-2 text-center py-10">
+              <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background:rgba(42,180,180,0.1)">
+                <svg class="w-7 h-7 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <p class="font-display text-xl text-navy-800 font-medium mb-2">Message received</p>
+              <p class="text-navy-500 text-sm">Thank you — we'll be in touch shortly.</p>
+            </div>`;
         } catch (err) {
-          status.textContent = 'Unable to send. Please try again or call us on 1300 111 324.';
+          console.error(err);
+          status.textContent = 'Something went wrong. Please try again or call us on 1300 111 324.';
           status.style.color = '#c0392b';
           btn.disabled = false;
           updateSubmitButton();
