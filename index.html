@@ -936,6 +936,8 @@
             if (error) throw error;
           } else {
             // ── No attachment: send as a plain email via Formspree ──
+            fd.append('_subject', `New enquiry — ${fd.get('first_name')} ${fd.get('last_name')} · ${fd.get('enquiry_type') || 'General'}`);
+            fd.append('_replyto', fd.get('email'));
             const res = await fetch(FORMSPREE, {
               method: 'POST',
               body: fd,
