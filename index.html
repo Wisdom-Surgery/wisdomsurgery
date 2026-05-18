@@ -853,11 +853,12 @@
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // ── Supabase client ──
+    // ── Supabase client (attachments only) ──
     const _supa = supabase.createClient(
       'https://mhgdzxftvqpqwpxryurm.supabase.co',
       'sb_publishable_BtGpwhScIGtGO_Yx_LLKow_7HBigtxk'
     );
+    const FORMSPREE = 'https://formspree.io/f/mjglvwdg';
 
     // ── File upload ──
     let selectedFiles = [];
@@ -915,29 +916,33 @@
         status.textContent = '';
 
         try {
-          // Upload files to Supabase Storage first
-          const filePaths = [];
-          for (const file of selectedFiles) {
-            const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-            const { error: uploadError } = await _supa.storage
-              .from('contact-attachments')
-              .upload(path, file);
-            if (uploadError) throw uploadError;
-            filePaths.push(path);
-          }
-
-          // Save submission to Supabase
           const fd = new FormData(contactForm);
-          const { error } = await _supa.from('contact_submissions').insert({
-            first_name:   fd.get('first_name'),
-            last_name:    fd.get('last_name'),
-            email:        fd.get('email'),
-            phone:        fd.get('phone'),
-            enquiry_type: fd.get('enquiry_type'),
-            message:      fd.get('message'),
-            file_paths:   filePaths
-          });
-          if (error) throw error;
+
+          if (selectedFiles.length > 0) {
+            // ── Has attachment: files + data go to Supabase ──
+            const filePaths = [];
+            for (const file of selectedFiles) {
+              const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+              const { error: uploadError } = await _supa.storage.from('contact-attachments').upload(path, file);
+              if (uploadError) throw uploadError;
+              filePaths.push(path);
+            }
+            const { error } = await _supa.from('contact_submissions').insert({
+              first_name: fd.get('first_name'), last_name: fd.get('last_name'),
+              email: fd.get('email'), phone: fd.get('phone'),
+              enquiry_type: fd.get('enquiry_type'), message: fd.get('message'),
+              file_paths: filePaths
+            });
+            if (error) throw error;
+          } else {
+            // ── No attachment: send as a plain email via Formspree ──
+            const res = await fetch(FORMSPREE, {
+              method: 'POST',
+              body: fd,
+              headers: { 'Accept': 'application/json' }
+            });
+            if (!res.ok) throw new Error('Email delivery failed');
+          }
 
           contactForm.innerHTML = `
             <div class="md:col-span-2 text-center py-10">
