@@ -78,6 +78,21 @@
     /* Signature */
     .signature-text{font-family:'Playfair Display',serif;font-style:italic;font-size:1.5rem;color:#0f2a4d;line-height:1.2;}
 
+    /* Credential disclosure rows */
+    .cred-grid{display:flex;flex-direction:column;gap:8px;}
+    .cred-row{border:1px solid rgba(15,42,77,0.12);border-radius:6px;background:rgba(15,42,77,0.02);}
+    .cred-row summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 12px;font-size:12.5px;font-weight:600;color:#0f2a4d;}
+    .cred-row summary::-webkit-details-marker{display:none;}
+    .cred-plus{width:17px;height:17px;min-width:17px;border-radius:50%;background:rgba(15,42,77,0.08);color:#0f2a4d;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1;flex-shrink:0;transition:transform 0.2s;}
+    .cred-row[open] .cred-plus{transform:rotate(45deg);}
+    .cred-row p{margin:0;padding:0 12px 11px;font-size:12px;color:#4a6274;line-height:1.55;}
+
+    /* Bio read-more */
+    .bio-expand summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#2ab4b4;display:flex;align-items:center;gap:5px;}
+    .bio-expand summary::-webkit-details-marker{display:none;}
+    .bio-expand summary::after{content:'\2193';font-size:10px;transition:transform 0.2s;}
+    .bio-expand[open] summary::after{transform:rotate(180deg);}
+
     /* Step pills */
     .step-pill{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(42,180,180,0.07);border-left:3px solid #2ab4b4;border-radius:0 6px 6px 0;}
 
@@ -169,7 +184,7 @@
         <p style="font-size:13px;color:#4a6274;margin:0;">Oral &amp; Maxillofacial Surgeon<br>
         <span style="color:#2ab4b4;">Wisdom Surgery Clinic</span></p>
       </div>
-      <a href="index.html#contact" class="btn-primary" style="padding:12px 24px;border-radius:999px;font-size:14px;font-weight:600;display:inline-block;">Book with Dr Raymond</a>
+      <a href="index.html#contact" class="btn-primary" style="padding:12px 24px;border-radius:999px;font-size:14px;font-weight:600;display:inline-block;">Contact Dr Raymond</a>
     </div>
   </div>
 </section>
@@ -182,41 +197,69 @@
     <div style="text-align:center;margin-bottom:52px;">
       <p class="text-teal-600 font-semibold text-xs tracking-widest uppercase mb-3">Dr Anna Raymond</p>
       <h2 class="font-display font-semibold text-navy-900 mb-4" style="font-size:1.75rem;letter-spacing:-0.02em;line-height:1.2;">A Surgeon's Journey</h2>
-      <p class="text-navy-500 text-sm max-w-sm mx-auto" style="line-height:1.8;">Her story — from medicine to maxillofacial surgery — coming soon.</p>
-      <span style="display:inline-block;margin-top:16px;padding:5px 16px;background:rgba(42,180,180,0.10);border:1px solid rgba(42,180,180,0.22);border-radius:999px;font-size:11px;font-weight:600;color:#2ab4b4;letter-spacing:0.07em;text-transform:uppercase;">Coming Soon</span>
+      <p class="text-navy-500 text-sm max-w-lg mx-auto" style="line-height:1.8;">Her story — from medicine to maxillofacial surgery.</p>
     </div>
 
-    <!-- Placeholder cards -->
+    <!-- Journey cards -->
     <div class="grid md:grid-cols-3 gap-6">
 
-      <div class="info-card p-6" style="opacity:0.5;pointer-events:none;user-select:none;">
+      <div class="info-card p-6">
         <div style="width:36px;height:36px;background:rgba(42,180,180,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
           <svg class="w-5 h-5" fill="none" stroke="#2ab4b4" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
         </div>
-        <h3 class="font-display font-semibold text-navy-800 text-base mb-4" style="letter-spacing:-0.01em;">Education &amp; Training</h3>
-        <div style="height:7px;background:rgba(42,180,180,0.18);border-radius:4px;margin-bottom:9px;width:85%;"></div>
-        <div style="height:7px;background:rgba(42,180,180,0.12);border-radius:4px;margin-bottom:9px;width:68%;"></div>
-        <div style="height:7px;background:rgba(42,180,180,0.08);border-radius:4px;width:78%;"></div>
+        <h3 class="font-display font-semibold text-navy-800 text-base mb-4" style="letter-spacing:-0.01em;">Biography</h3>
+        <p style="font-size:13.5px;color:#4a6274;line-height:1.7;margin:0 0 10px;">Dr Raymond's passion for Oral and Maxillofacial Surgery started as a Brisbane-based dental student at the University of Queensland — a path that carried her across Australia and the UK, and eventually to founding Wisdom Surgery Clinic.</p>
+        <details class="bio-expand">
+          <summary>Read full biography</summary>
+          <div style="font-size:13.5px;color:#4a6274;line-height:1.7;margin-top:12px;">
+            <p style="margin-bottom:12px;">Graduating in 2005 with Honours, she was also awarded a prestigious medal in Oral &amp; Maxillofacial Surgery. Returning to the UQ medical school, Dr Raymond went on to receive an MBBS (Honours) in 2010. Throughout her subsequent years as a junior doctor, she was fortunate to work and train in maxillofacial units in Brisbane, Sydney, Newcastle and Canberra as well as at a highly respected unit in the UK.</p>
+            <p style="margin-bottom:12px;">Dr Raymond also spent 12 months as a lecturer in Oral Surgery at the University of Queensland Dental School. She authored a textbook chapter in Head, Neck and Dental Emergencies, published as part of the well-known Oxford Handbook of Clinical Medicine Series in 2018.</p>
+            <p style="margin-bottom:12px;">As an expert clinician, she is well known for her warm smile, kind and gentle nature and clear communication. Dr Anna Raymond is the type of surgeon who always makes time for her patients. Her provision of genuine care compliments the entire practice of Oral and Maxillofacial Surgery at WTSC.</p>
+            <p style="margin-bottom:12px;">Dr Raymond is expert in the full scope of Oral and Maxillofacial Surgery. She looks forward to warmly welcoming patients and to provide a high level of service that supports their surgical needs. Working collaboratively with referring practitioners and maintaining the highest of clinical standards helps to ensures the best possible outcome for each and every patient.</p>
+            <p style="margin:0;">In 2026 Wisdom Surgery Clinic was created to support her vision of this service.</p>
+          </div>
+        </details>
       </div>
 
-      <div class="info-card navy-top p-6" style="opacity:0.5;pointer-events:none;user-select:none;">
+      <div class="info-card navy-top p-6">
         <div style="width:36px;height:36px;background:rgba(15,42,77,0.07);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
-          <svg class="w-5 h-5" fill="none" stroke="#0f2a4d" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="#0f2a4d" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-navy-800 text-base mb-4" style="letter-spacing:-0.01em;">Education &amp; Training</h3>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;"><span style="color:#0f2a4d;font-weight:500;">University of Queensland</span> — BDSc (Hons), 2005, awarded the Oral &amp; Maxillofacial Surgery medal</li>
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;"><span style="color:#0f2a4d;font-weight:500;">UQ Medical School</span> — MBBS (Hons), 2010</li>
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;">Maxillofacial training in Brisbane, Sydney, Newcastle and Canberra, plus a highly regarded unit in the UK</li>
+        </ul>
+      </div>
+
+      <div class="info-card gold-top p-6">
+        <div style="width:36px;height:36px;background:rgba(176,154,110,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <svg class="w-5 h-5" fill="none" stroke="#8a7550" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
         </div>
         <h3 class="font-display font-semibold text-navy-800 text-base mb-4" style="letter-spacing:-0.01em;">Specialist Credentials</h3>
-        <div style="height:7px;background:rgba(15,42,77,0.12);border-radius:4px;margin-bottom:9px;width:80%;"></div>
-        <div style="height:7px;background:rgba(15,42,77,0.08);border-radius:4px;margin-bottom:9px;width:62%;"></div>
-        <div style="height:7px;background:rgba(15,42,77,0.05);border-radius:4px;width:73%;"></div>
-      </div>
 
-      <div class="info-card gold-top p-6" style="opacity:0.5;pointer-events:none;user-select:none;">
-        <div style="width:36px;height:36px;background:rgba(176,154,110,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
-          <svg class="w-5 h-5" fill="none" stroke="#8a7550" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        <div class="cred-grid" style="margin-bottom:16px;">
+          <details class="cred-row">
+            <summary><span>BDSc (Hons)</span><span class="cred-plus">+</span></summary>
+            <p><em>Bachelor of Dental Science (Honours)</em> — an undergraduate degree in dentistry. Dr Raymond's journey carried her into this degree, graduating with Honours from the University of Queensland in 2005.</p>
+          </details>
+          <details class="cred-row">
+            <summary><span>MBBS (Hons)</span><span class="cred-plus">+</span></summary>
+            <p><em>Bachelor of Medicine, Bachelor of Surgery (Honours)</em> — the core medical degree required to practise as a doctor. Her path led back to UQ's medical school, where she graduated with Honours in 2010, laying the foundation for her surgical career.</p>
+          </details>
+          <details class="cred-row">
+            <summary><span>FRACDS (OMS)</span><span class="cred-plus">+</span></summary>
+            <p><em>Fellow of the Royal Australasian College of Dental Surgeons (Oral &amp; Maxillofacial Surgery)</em> — the formal specialist qualification in OMS. Her training carried her to this Fellowship, the mark of her specialist expertise.</p>
+          </details>
         </div>
-        <h3 class="font-display font-semibold text-navy-800 text-base mb-4" style="letter-spacing:-0.01em;">Philosophy &amp; Approach</h3>
-        <div style="height:7px;background:rgba(176,154,110,0.18);border-radius:4px;margin-bottom:9px;width:90%;"></div>
-        <div style="height:7px;background:rgba(176,154,110,0.12);border-radius:4px;margin-bottom:9px;width:70%;"></div>
-        <div style="height:7px;background:rgba(176,154,110,0.08);border-radius:4px;width:82%;"></div>
+
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;">Lecturer in Oral Surgery, University of Queensland Dental School (12 months)</li>
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;">Author, <em>Head, Neck and Dental Emergencies</em> — Oxford Handbook of Clinical Medicine Series (2018)</li>
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;">Expert across the full scope of Oral and Maxillofacial Surgery</li>
+          <li style="font-size:13.5px;color:#4a6274;line-height:1.6;">Founder, Wisdom Surgery Clinic (2026)</li>
+        </ul>
       </div>
 
     </div>
