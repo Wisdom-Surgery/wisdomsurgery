@@ -359,7 +359,33 @@
         <a href="#about"    class="nav-link py-1" onclick="closeMobileMenu()">About</a>
         <a href="#faq"      class="nav-link py-1" onclick="closeMobileMenu()">FAQ</a>
         <div class="flex flex-col gap-2 mt-1">
-          <a href="https://wisdomsurgery.me/patient-information.html" target="_blank" rel="noopener" class="btn-primary px-5 py-3 rounded-full text-sm font-semibold text-center" onclick="closeMobileMenu()">Book Online</a>
+          <details class="mobile-book-dropdown">
+            <summary class="btn-primary px-5 py-3 rounded-full text-sm font-semibold text-center">
+              Book Online
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="mobile-book-panel">
+              <div class="mobile-book-header">Choose your location</div>
+              <div class="mobile-book-location disabled">
+                <div><div class="book-location-name">Cleveland <span style="display:inline-block; background:#fef3c7; color:#92400e; border-radius:4px; padding:1px 6px; font-size:9px; font-weight:600; text-transform:uppercase; margin-left:6px; vertical-align:middle;">Coming Soon</span></div><div class="book-location-sub">Coming soon</div></div>
+              </div>
+              <a class="mobile-book-location" href="https://healthengine.com.au/v2/appointment/book_webplugin/102322/" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                <div><div class="book-location-name">Caboolture</div><div class="book-location-sub">Caboolture Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+              </a>
+              <a class="mobile-book-location" href="https://healthengine.com.au/v2/appointment/book_webplugin/102324/" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                <div><div class="book-location-name">Everton Park</div><div class="book-location-sub">North West Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+              </a>
+              <a class="mobile-book-location" href="https://healthengine.com.au/v2/appointment/book_webplugin/102325" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                <div><div class="book-location-name">Kippa-Ring</div><div class="book-location-sub">Peninsula Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+              </a>
+              <a class="mobile-book-location" href="https://healthengine.com.au/v2/appointment/book_webplugin/102323/" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                <div><div class="book-location-name">Greenslopes</div><div class="book-location-sub">Greenslopes Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+              </a>
+              <a class="mobile-book-location" href="https://healthengine.com.au/v2/appointment/book_webplugin/102616?practitioner=141495#specialty-selection" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+                <div><div class="book-location-name">Telehealth</div><div class="book-location-sub">Private Coviu Room</div></div><span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          </details>
           <a href="payment.html" class="btn-ghost px-5 py-3 rounded-full text-sm font-medium text-center flex items-center justify-center gap-2 bg-white" onclick="closeMobileMenu()">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             Pay Invoice
