@@ -5,31 +5,33 @@ Captured 2026-07-27 from Bryan. Working list — tick items as they ship.
 ## Main website
 
 ### Design / structure
-- [ ] Telehealth Preview full-screen window needs adjusting — **open question: make a video for this instead?**
+- [ ] Telehealth Preview full-screen window needs adjusting (decided: adjust the window, not a video)
 - [ ] Sleeker mobile menu design
-- [ ] **Decision needed:** add a "For Referring Doctors" section to the menu, or keep relying on printed cards + personal connections?
-- [ ] **Decision needed:** add Cleveland to consults/operating now, or leave as "coming soon"?
+- [x] ~~"For Referring Doctors" menu item~~ — **decided: no, keep relying on printed cards + personal connections**
+- [x] ~~Cleveland live now~~ — **decided: still "coming soon."** Renamed to "Ramsey Surgical Clinic, Cleveland" on the booking form, visible but not selectable.
 
 ### Copy changes
 - [ ] **Why choose us:** "We welcome clear communication and questions as it supports informed decisions, and collaboration with your other health care providers and partnership throughout your surgical journey."
 - [ ] **How do I get started:** remove the email (it isn't listed); change "contact us" to a hyperlink on *online form*
 - [ ] **Three Simple Steps** (welcome area), step 3 becomes: "Call or connect with us for an appointment and get an email or SMS confirmation with any details you may need."
-- [ ] Consider using the more detailed booking page: https://wisdomsurgery.me/index.html
+- [x] Switched to the detailed booking page (wisdomsurgery.me/index.html) as the primary flow — see below.
 
-### Booking / intake form
-- [ ] Page one: no postcode needed
-- [ ] Move "Preferred days" under "Preferred time of day"
-- [ ] Notes section message: "If we don't have your referral please add it in the later step, or let us know if one is being sent to us. If there is anything else you'd like us to know, please include it here."
-- [ ] Location 3: "Ramsey Surgical Clinic Cleveland"
-- [ ] Referral tab: swap Medicare number → **Doctor's Provider Number**
-- [ ] Referral letter note: "Please upload a digital copy or photo of your referral. If you were given scans to share with us, please upload those as well."
-- [ ] Full menu of Australian private health funds + the cover-type dropdown from the short intake form
-- [ ] Patient forms page → pay invoice button page: fix the "back to website" links
+### Booking flow — decided: switched to wisdomsurgery.me/index.html
+- [x] **Real functional fix:** the form was building its full payload, logging it to the browser console, and showing a fake success message. Nothing was ever sent anywhere — no patient's booking request ever reached the practice. Now writes to Supabase (`appointment_requests`), uploads the referral file to a private bucket, and emails the practice via a new `notify-appointment-request` edge function. Verified end-to-end with real REST calls.
+- [x] Page one already has no postcode field — nothing to remove.
+- [x] "Preferred days" was already positioned under "Preferred time of day" — already correct.
+- [x] Notes placeholder rewritten to Bryan's copy.
+- [x] Location 3 renamed "Ramsey Surgical Clinic, Cleveland" — marked coming-soon per the decision above.
+- [x] Medicare number → **Doctor's Provider Number**.
+- [x] Referral letter upload copy rewritten to Bryan's copy.
+- [x] Full AU private health fund list (29 funds) + cover-type dropdown added, matching the short intake form.
+- [ ] Patient forms page → pay invoice button page: "back to website" links not yet checked.
+- [x] Every "Book Online" / HealthEngine link and the "click here to book" link across index.html and welcome.html now point to the real flow instead of a placeholder HealthEngine plugin URL.
 
-### Contact section
-- [ ] Add under "Tell us a little more…": **Share Your Schedule** with note "Help us coordinate a time we can connect."
-- [ ] M–F day markers with a free-text time field beside each
-- [ ] **Decision needed:** keep Formspree, or move submissions to Supabase (one less thing to monitor, and we control the formatting)?
+### Contact section — decided: moved to Supabase
+- [x] Simplified to First & Last name, Email, Phone, Question (dropped the procedure-type dropdown).
+- [x] **Share Your Schedule** added: Mon–Fri with a free-text time field beside each, note "Help us coordinate a time we can connect."
+- [x] Formspree retired entirely. This removed the only thing emailing the practice on submit, so a `notify-contact-submission` edge function was added and deployed — without it, moving to Supabase would have made every enquiry go silent. Verified end-to-end with real REST calls.
 
 ## Policies
 
@@ -98,9 +100,9 @@ Create your account and get your own portal — a personal space to stay connect
 
 ---
 
-## Open decisions for Bryan
-1. Telehealth preview — video, or adjusted window?
-2. "For Referring Doctors" in the main menu — yes or keep it private?
-3. Cleveland — live now or still "coming soon"?
-4. Contact form — stay on Formspree or move to Supabase?
-5. Use the detailed booking page at wisdomsurgery.me?
+## Decisions (answered 2026-07-27)
+1. Telehealth preview → adjust the window (not a video). Still to build.
+2. "For Referring Doctors" menu item → no, keep it private.
+3. Cleveland → still "coming soon." Named and ready, not selectable.
+4. Contact form → moved to Supabase. Done.
+5. Detailed booking page (wisdomsurgery.me) → yes, switched. Done, and it was silently broken before this — see Booking flow above.
