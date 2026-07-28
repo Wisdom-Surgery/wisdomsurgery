@@ -5,15 +5,15 @@ Captured 2026-07-27 from Bryan. Working list — tick items as they ship.
 ## Main website
 
 ### Design / structure
-- [ ] Telehealth Preview full-screen window needs adjusting (decided: adjust the window, not a video)
-- [ ] Sleeker mobile menu design
+- [x] Telehealth Preview full-screen window fixed — root cause was a `transform`/`backdrop-filter` containing-block bug, not a sizing issue. Full-screen toggle now fills the real viewport on desktop and mobile.
+- [x] Mobile menu redesigned as a full-screen overlay — "Your Journey" collapses into a closed-by-default accordion, Book Online/Pay Invoice pinned to a sticky bottom bar.
 - [x] ~~"For Referring Doctors" menu item~~ — **decided: no, keep relying on printed cards + personal connections**
 - [x] ~~Cleveland live now~~ — **decided: still "coming soon."** Renamed to "Ramsey Surgical Clinic, Cleveland" on the booking form, visible but not selectable.
 
 ### Copy changes
-- [ ] **Why choose us:** "We welcome clear communication and questions as it supports informed decisions, and collaboration with your other health care providers and partnership throughout your surgical journey."
-- [ ] **How do I get started:** remove the email (it isn't listed); change "contact us" to a hyperlink on *online form*
-- [ ] **Three Simple Steps** (welcome area), step 3 becomes: "Call or connect with us for an appointment and get an email or SMS confirmation with any details you may need."
+- [x] **Why choose us:** "We welcome clear communication and questions as it supports informed decisions, and collaboration with your other health care providers and partnership throughout your surgical journey."
+- [x] **How do I get started:** email removed; hyperlink moved from "contact us" to *online form*, pointing to wisdomsurgery.me.
+- [x] **Three Simple Steps** (welcome area), step 3 now reads: "Call or connect with us for an appointment / Get an email or SMS confirmation with any details you may need."
 - [x] Switched to the detailed booking page (wisdomsurgery.me/index.html) as the primary flow — see below.
 
 ### Booking flow — decided: switched to wisdomsurgery.me/index.html
@@ -25,12 +25,12 @@ Captured 2026-07-27 from Bryan. Working list — tick items as they ship.
 - [x] Medicare number → **Doctor's Provider Number**.
 - [x] Referral letter upload copy rewritten to Bryan's copy.
 - [x] Full AU private health fund list (29 funds) + cover-type dropdown added, matching the short intake form.
-- [ ] Patient forms page → pay invoice button page: "back to website" links not yet checked.
+- [x] Patient forms page → pay invoice button page: "back to website" links fixed. `payment.html` lives on wisdomsurgery.me, so its relative `index.html` links were sending patients to the booking flow instead of the real main site — repointed to `https://wisdomsurgery.clinic`.
 - [x] Every "Book Online" / HealthEngine link and the "click here to book" link across index.html and welcome.html now point to the real flow instead of a placeholder HealthEngine plugin URL.
+- [x] Booking wizard no longer scrolls to page top on each step — now holds position at the form.
 
 ### Contact section — decided: moved to Supabase
-- [x] Simplified to First & Last name, Email, Phone, Question (dropped the procedure-type dropdown).
-- [x] **Share Your Schedule** added: Mon–Fri with a free-text time field beside each, note "Help us coordinate a time we can connect."
+- [x] Simplified further per later direction: Name, Email, Phone only — Question, Share Your Schedule, and file upload all removed.
 - [x] Formspree retired entirely. This removed the only thing emailing the practice on submit, so a `notify-contact-submission` edge function was added and deployed — without it, moving to Supabase would have made every enquiry go silent. Verified end-to-end with real REST calls.
 
 ## Policies
@@ -71,32 +71,11 @@ Written post-operative care instructions will be provided to you before you leav
 
 ---
 
-## Referrer community page (refer.html)
+## Referrer community page (refer.html) — done
 
-- [ ] A5 printable form — fine-tune, link it, and make the preview viewable on mobile
-- [ ] Build a tutorial walking through the referral portal's steps and features, and how it connects to the clinic
-
-### Copy — Availability Notices
-Get notified when new appointment availability opens, including any new consulting locations — so your patients can be seen promptly. Or when Dr Raymond is on leave.
-
-### Copy — how referrals work
-Referrals may be sent through your personal referral portal — from our app or computer logon. If you set up more than one location or practitioner you can choose them from the drop down. This will fill out your practice and provider number details automatically. Please include your patient's relevant history, imaging, and your clinical question or concern. Dr Anna gets access to your notes directly through her app.
-
-### Copy — Your portal
-**Built for colleagues & community.**
-We built a dedicated space just for the practitioners who refer to us. Your own login, your own dashboard — with a direct line to Dr Anna & staff; to help invite and support more intentional connection.
-
-**Hear from Dr Anna**
-A vision to include updates, new availability, and service announcements which come to you through your portal — not a newsletter. Connect through Coviu to join advanced video calls for complex cases with tools, charts, & scans — right from your dashboard.
-
-**Your own dashboard**
-See the referrals you've recently sent, and direct history with the clinic — personalised to you.
-
-**Make it yours.**
-Your portal isn't a generic tool — it's a space built around you. Choose your accent colour, add your practice logo alongside ours, and set how you'd like to be greeted.
-
-### Copy — Join the referrer community
-Create your account and get your own portal — a personal space to stay connected with Dr Anna, send referrals digitally, and track your patients' care. With our free app — your office can use a phone or any tablet for easy filing and sending of your referrals — or they may even be finished and sent from a laptop or desktop. These reach our dedicated secure inbox, and can be seen by Dr Anna herself through her app.
+- [x] A5 printable form — real source PDF (`forms/Wisdom-Surgery-Referral-Pad-A5.pdf`) embedded as an inline preview, with Download and "Open & print" actions. Prints pixel-accurate since it's the actual PDF, not an HTML recreation. Responsive height for mobile.
+- [x] Tutorial section ("Using your portal") — 5-step walkthrough from login to Dr Anna receiving the referral.
+- [x] Availability Notices card, "How referrals work" copy, new "Your Portal" section (4 subsections), and "Join the referrer community" registration copy all applied as drafted below.
 
 ---
 
