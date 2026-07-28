@@ -174,10 +174,67 @@
     /* Stat card */
     .stat-card { border-left: 3px solid #2ab4b4; }
 
-    /* Mobile menu */
-    .mobile-menu { transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4,0,0.2,1); }
-    .mobile-menu.hidden { opacity: 0; transform: translateY(-8px); pointer-events: none; }
-    .mobile-menu.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    /* Mobile menu — full-screen overlay */
+    .mm-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: linear-gradient(165deg, #0f2a4d 0%, #091d38 100%);
+      display: flex; flex-direction: column;
+      opacity: 0; visibility: hidden; transform: translateY(-12px);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.28s;
+    }
+    .mm-overlay.open {
+      opacity: 1; visibility: visible; transform: translateY(0);
+      transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mm-top {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .mm-close {
+      width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.08); color: #fff; transition: background 0.15s ease;
+    }
+    .mm-close:hover { background: rgba(255,255,255,0.16); }
+    .mm-body { flex: 1 1 auto; overflow-y: auto; padding: 12px 24px 24px; }
+    .mm-link {
+      display: flex; align-items: center; gap: 12px; padding: 15px 4px;
+      color: #fff; font-weight: 500; font-size: 1.05rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mm-link svg { opacity: 0.55; flex-shrink: 0; }
+    .mm-accordion-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 15px 4px; background: none; border: 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #fff; font-weight: 500; font-size: 1.05rem; text-align: left; cursor: pointer;
+    }
+    .mm-accordion-trigger-left { display: flex; align-items: center; gap: 12px; }
+    .mm-accordion-trigger svg.mm-chevron { opacity: 0.6; transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0; }
+    .mm-accordion-trigger[aria-expanded="true"] svg.mm-chevron { transform: rotate(180deg); }
+    .mm-accordion-panel {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mm-accordion-panel.open { max-height: 400px; }
+    .mm-sublink {
+      display: flex; align-items: center; gap: 10px; padding: 12px 4px 12px 34px;
+      color: rgba(255,255,255,0.68); font-size: 0.92rem; font-weight: 500;
+    }
+    .mm-cta {
+      flex-shrink: 0; padding: 16px 24px calc(20px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(255,255,255,0.08); background: rgba(9,29,56,0.6);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .mm-book-wrap { position: relative; }
+    .mm-book-panel {
+      position: absolute; left: 0; right: 0; bottom: calc(100% + 10px);
+      background: #fff; border-radius: 16px; padding: 8px;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.28);
+      opacity: 0; visibility: hidden; transform: translateY(8px);
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s cubic-bezier(0.34,1.2,0.64,1);
+      max-height: 60vh; overflow-y: auto;
+    }
+    .mm-book-panel.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .mm-book-btn svg { transition: transform 0.2s ease; }
+    .mm-book-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
 
     /* Section divider */
     .wave-divider { line-height: 0; }
@@ -344,56 +401,86 @@
         </svg>
       </button>
     </nav>
+  </header>
 
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="mobile-menu hidden md:hidden px-6 pb-5 pt-1 border-t border-teal-100">
-      <div class="flex flex-col gap-4">
-        <a href="#journey"  class="nav-link py-1" onclick="closeMobileMenu()">Your Journey</a>
-        <a href="welcome.html" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ A Personal Welcome</a>
-        <a href="https://wisdomsurgery.me/patient-information.html#form" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ New Patient Form</a>
-        <a href="https://wisdomsurgery.me/patient-information.html#forms" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ Patient Forms</a>
-        <a href="https://wisdomsurgery.me/patient-information.html" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ Practice Policies</a>
-        <a href="https://wisdomsurgery.me/telehealth.html" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ Telehealth</a>
-        <a href="#contact" class="nav-link py-1 pl-4" style="color:#4a6274;font-size:0.85rem" onclick="closeMobileMenu()">↳ Connect with Us</a>
-        <a href="#services" class="nav-link py-1" onclick="closeMobileMenu()">Services</a>
-        <a href="#about"    class="nav-link py-1" onclick="closeMobileMenu()">About</a>
-        <a href="#faq"      class="nav-link py-1" onclick="closeMobileMenu()">FAQ</a>
-        <div class="flex flex-col gap-2 mt-1">
-          <details class="mobile-book-dropdown">
-            <summary class="btn-primary px-5 py-3 rounded-full text-sm font-semibold text-center">
-              Book Online
-              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </summary>
-            <div class="mobile-book-panel">
-              <div class="mobile-book-header">Choose your location</div>
-              <div class="mobile-book-location disabled">
-                <div><div class="book-location-name">Cleveland <span style="display:inline-block; background:#fef3c7; color:#92400e; border-radius:4px; padding:1px 6px; font-size:9px; font-weight:600; text-transform:uppercase; margin-left:6px; vertical-align:middle;">Coming Soon</span></div><div class="book-location-sub">Coming soon</div></div>
-              </div>
-              <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
-                <div><div class="book-location-name">Caboolture</div><div class="book-location-sub">Caboolture Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
-              </a>
-              <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
-                <div><div class="book-location-name">Everton Park</div><div class="book-location-sub">North West Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
-              </a>
-              <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
-                <div><div class="book-location-name">Kippa-Ring</div><div class="book-location-sub">Peninsula Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
-              </a>
-              <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
-                <div><div class="book-location-name">Greenslopes</div><div class="book-location-sub">Greenslopes Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
-              </a>
-              <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
-                <div><div class="book-location-name">Telehealth</div><div class="book-location-sub">Private Coviu Room</div></div><span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-          </details>
-          <a href="payment.html" class="btn-ghost px-5 py-3 rounded-full text-sm font-medium text-center flex items-center justify-center gap-2 bg-white" onclick="closeMobileMenu()">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            Pay Invoice
+  <!-- Mobile menu — full-screen overlay. Deliberately NOT nested inside
+       <header>: header has backdrop-filter, which (like transform) creates
+       a containing block for position:fixed descendants, so a fixed overlay
+       nested inside it renders clipped to the header's box instead of the
+       real viewport. -->
+  <div id="mobile-menu" class="mm-overlay md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="mm-top">
+      <img src="brand_assets/WisdomSurgery_Logo_Horizontal_Reversed-Picsart-BackgroundRemover.png" alt="Wisdom Surgery Clinic" class="h-8 w-auto" />
+      <button id="mm-close-btn" class="mm-close" aria-label="Close menu" onclick="closeMobileMenu()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <nav class="mm-body">
+      <button class="mm-accordion-trigger" id="mm-journey-trigger" aria-expanded="false" onclick="toggleMmAccordion()">
+        <span class="mm-accordion-trigger-left">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          Your Journey
+        </span>
+        <svg class="mm-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="mm-accordion-panel" id="mm-journey-panel">
+        <a href="welcome.html" class="mm-sublink" onclick="closeMobileMenu()">↳ A Personal Welcome</a>
+        <a href="https://wisdomsurgery.me/patient-information.html#form" class="mm-sublink" onclick="closeMobileMenu()">↳ New Patient Form</a>
+        <a href="https://wisdomsurgery.me/patient-information.html#forms" class="mm-sublink" onclick="closeMobileMenu()">↳ Patient Forms</a>
+        <a href="https://wisdomsurgery.me/patient-information.html" class="mm-sublink" onclick="closeMobileMenu()">↳ Practice Policies</a>
+        <a href="https://wisdomsurgery.me/telehealth.html" class="mm-sublink" onclick="closeMobileMenu()">↳ Telehealth</a>
+        <a href="#contact" class="mm-sublink" onclick="closeMobileMenu()">↳ Connect with Us</a>
+      </div>
+
+      <a href="#services" class="mm-link" onclick="closeMobileMenu()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/></svg>
+        Services
+      </a>
+      <a href="#about" class="mm-link" onclick="closeMobileMenu()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4m0-4h.01"/></svg>
+        About
+      </a>
+      <a href="#faq" class="mm-link" onclick="closeMobileMenu()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.75-2 3.25m.02 3h-.02"/></svg>
+        FAQ
+      </a>
+    </nav>
+
+    <div class="mm-cta">
+      <div class="mm-book-wrap">
+        <div class="mm-book-panel" id="mm-book-panel">
+          <div class="mobile-book-header">Choose your location</div>
+          <div class="mobile-book-location disabled">
+            <div><div class="book-location-name">Cleveland <span style="display:inline-block; background:#fef3c7; color:#92400e; border-radius:4px; padding:1px 6px; font-size:9px; font-weight:600; text-transform:uppercase; margin-left:6px; vertical-align:middle;">Coming Soon</span></div><div class="book-location-sub">Coming soon</div></div>
+          </div>
+          <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+            <div><div class="book-location-name">Caboolture</div><div class="book-location-sub">Caboolture Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+            <div><div class="book-location-name">Everton Park</div><div class="book-location-sub">North West Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+            <div><div class="book-location-name">Kippa-Ring</div><div class="book-location-sub">Peninsula Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+            <div><div class="book-location-name">Greenslopes</div><div class="book-location-sub">Greenslopes Private Hospital</div></div><span aria-hidden="true">&rarr;</span>
+          </a>
+          <a class="mobile-book-location" href="https://wisdomsurgery.me/index.html" target="_blank" rel="noopener" onclick="closeMobileMenu()">
+            <div><div class="book-location-name">Telehealth</div><div class="book-location-sub">Private Coviu Room</div></div><span aria-hidden="true">&rarr;</span>
           </a>
         </div>
+        <button id="mm-book-btn" class="mm-book-btn btn-primary px-5 py-3.5 rounded-full text-sm font-semibold w-full flex items-center justify-center gap-1.5" aria-expanded="false" onclick="toggleMmBookPanel()">
+          Book Online
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
       </div>
+      <a href="payment.html" class="btn-ghost px-5 py-3 rounded-full text-sm font-medium text-center flex items-center justify-center gap-2 bg-white" onclick="closeMobileMenu()">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        Pay Invoice
+      </a>
     </div>
-  </header>
+  </div>
 
   <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
   <section class="hero-bg relative overflow-hidden">
@@ -814,28 +901,37 @@
   </script>
 
   <script>
-    // ── Mobile menu ──
+    // ── Mobile menu (full-screen overlay) ──
     const toggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    const iconOpen = document.getElementById('menu-icon-open');
-    const iconClose = document.getElementById('menu-icon-close');
     let menuOpen = false;
 
     toggle.addEventListener('click', () => {
       menuOpen = !menuOpen;
-      mobileMenu.classList.toggle('hidden', !menuOpen);
       mobileMenu.classList.toggle('open', menuOpen);
-      iconOpen.classList.toggle('hidden', menuOpen);
-      iconClose.classList.toggle('hidden', !menuOpen);
+      document.body.style.overflow = menuOpen ? 'hidden' : '';
       toggle.setAttribute('aria-label', menuOpen ? 'Close menu' : 'Open menu');
     });
 
     function closeMobileMenu() {
       menuOpen = false;
-      mobileMenu.classList.add('hidden');
       mobileMenu.classList.remove('open');
-      iconOpen.classList.remove('hidden');
-      iconClose.classList.add('hidden');
+      document.body.style.overflow = '';
+      toggle.setAttribute('aria-label', 'Open menu');
+    }
+
+    function toggleMmAccordion() {
+      const trigger = document.getElementById('mm-journey-trigger');
+      const panel = document.getElementById('mm-journey-panel');
+      const isOpen = panel.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function toggleMmBookPanel() {
+      const btn = document.getElementById('mm-book-btn');
+      const panel = document.getElementById('mm-book-panel');
+      const isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 
     // ── FAQ accordion ──
@@ -921,20 +1017,9 @@
           status.textContent = 'Something went wrong. Please try again or call us on 1300 111 324.';
           status.style.color = '#c0392b';
           btn.disabled = false;
-          updateSubmitButton();
         }
       });
     }
-
-    // Drag and drop
-    const zone = document.getElementById('upload-zone');
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('border-teal-400','bg-teal-50'); });
-    zone.addEventListener('dragleave', () => zone.classList.remove('border-teal-400','bg-teal-50'));
-    zone.addEventListener('drop', e => {
-      e.preventDefault();
-      zone.classList.remove('border-teal-400','bg-teal-50');
-      handleFiles(e.dataTransfer.files);
-    });
 
     // ── Dropdown booking logic ──
     window.toggleBooking = function(e) {
