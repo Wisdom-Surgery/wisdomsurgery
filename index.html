@@ -98,11 +98,13 @@
     .btn-ghost:active { transform: translateY(0); }
     .btn-ghost:focus-visible { outline: 3px solid rgba(42,180,180,0.5); outline-offset: 3px; }
 
-    /* Doctor photo frame */
+    /* Doctor photo frame — a thin teal hairline, not a mount.
+       Was 6px and 14px rings; the opacity is lifted a little so a 1px line
+       still reads at the weight the 6px one did. */
     .dr-frame {
       box-shadow:
-        0 0 0 6px rgba(42,180,180,0.10),
-        0 0 0 14px rgba(42,180,180,0.05),
+        0 0 0 1px rgba(42,180,180,0.28),
+        0 0 0 4px rgba(42,180,180,0.07),
         0 32px 80px rgba(42,180,180,0.22),
         0 8px 24px rgba(0,0,0,0.10);
     }
@@ -504,11 +506,12 @@
       </div>
 
       <!-- Right: Dr Anna photo -->
-      <div class="order-1 md:order-2 flex justify-center md:justify-end fade-up" style="transition-delay:0.15s; padding-top: 2.4rem;">
+      <div class="order-1 md:order-2 flex justify-center md:justify-end fade-up" style="transition-delay:0.15s;">
         <div class="relative">
-          <!-- Decorative rings -->
+          <!-- Decorative rings. The soft glow stays; the pale mount was -inset-3
+               (12px) and read as a thick frame next to the hairline on the photo. -->
           <div class="absolute -inset-8 rounded-3xl" style="z-index:0; background: radial-gradient(ellipse at center, rgba(42,180,180,0.13) 0%, transparent 70%)"></div>
-          <div class="absolute -inset-3 rounded-3xl" style="z-index:0; background: rgba(42,180,180,0.06); border: 1px solid rgba(42,180,180,0.10)"></div>
+          <div class="absolute -inset-1 rounded-3xl" style="z-index:0; background: rgba(42,180,180,0.06); border: 1px solid rgba(42,180,180,0.10)"></div>
           <img
             src="brand_assets/Dr-Anna-Standing-Warm-Practice.jpeg"
             alt="Dr Anna Raymond — Oral & Maxillofacial Surgeon"
